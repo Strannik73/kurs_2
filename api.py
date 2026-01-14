@@ -5,7 +5,6 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-# Логирование
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(levelname)s %(name)s: %(message)s"
@@ -13,11 +12,7 @@ logging.basicConfig(
 logger = logging.getLogger("api")
 
 coord: Dict[str, Tuple[float, float]] = {
-<<<<<<< HEAD
-    # === gomel
-=======
     #===gomel
->>>>>>> aeab2257e541bc5209d3391112e0528937120c17
     "br": (51.78022008012895, 30.271741574508955),
     "buda": (52.714267028968756, 30.802356998411106),
     "vetka": (52.56426315412645, 31.241810131761177),
@@ -39,11 +34,7 @@ coord: Dict[str, Tuple[float, float]] = {
     "svetl": (52.644886695068585, 29.96854545882067),
     "hoyniki": (51.892096567199964, 30.204306456618816),
     "chechersk": (52.914538846371926, 30.98889736072511),
-<<<<<<< HEAD
-    # === brest
-=======
     #===brest
->>>>>>> aeab2257e541bc5209d3391112e0528937120c17
     "baran": (53.13793334196031, 26.0774020853999),
     "berezov": (52.535662787846945, 24.978395430202884),
     "brestsk": (52.10751670386272, 23.855859137092388),
@@ -60,10 +51,6 @@ coord: Dict[str, Tuple[float, float]] = {
     "pinsk": (52.110670995647986, 26.239438870196224),
     "pruzhansk": (52.55871552727594, 24.452047149656757),
     "stolinsk": (51.89677584796369, 26.874823619433),
-<<<<<<< HEAD
-}
-
-=======
     #===grodno
     "berestovitski": (53.18821995517449, 24.011441647973093),
     "volkovisski": (53.15559712012693, 24.45113803470285),
@@ -152,11 +139,6 @@ coord: Dict[str, Tuple[float, float]] = {
 
 }
 
-# URL API и ключ (ключ можно переопределить через переменную окружения WEATHERBIT_KEY)
-DEFAULT_KEY = "7216cf5ae90f43f5815d50ddcf378c4f"
-key = os.getenv("WEATHERBIT_KEY", DEFAULT_KEY)
-url = "https://api.weatherbit.io/v2.0/current"
->>>>>>> aeab2257e541bc5209d3391112e0528937120c17
 
 DEFAULT_KEY = "92ff3999060421b6afef1bec8d98f3b9"
 key = os.getenv("OPENWEATHER_KEY", DEFAULT_KEY)
@@ -180,7 +162,6 @@ def data_url(region_id: str) -> dict:
 
     region_id = region_id.strip()
 
-    # Проверяем, есть ли регион в coord
     if region_id in coord:
         lat, lon = coord[region_id]
     else:
@@ -190,27 +171,25 @@ def data_url(region_id: str) -> dict:
         "lat": lat,
         "lon": lon,
         "appid": key,
-        "units": "metric",  # Используем цельсий
-        "lang": "ru",  # Выводим описание на русском
+        "units": "metric",  
+        "lang": "ru",  
     }
 
     try:
         resp = _session.get(url, params=params, timeout=10)
         resp.raise_for_status()
         payload = resp.json()
-<<<<<<< HEAD
     except requests.RequestException as exc:
         logger.error("Ошибка сети: %s", exc)
         raise RuntimeError(f"Ошибка сети: {exc}")
 
-    # Извлекаем данные о погоде из ответа
     weather = payload.get("weather", [{}])[0]
     main = payload.get("main", {})
 
-    temp = round(main.get("temp", 0))  # Округляем температуру
-    descr = weather.get("description", "-")  # Описание погоды
-    icon = weather.get("icon", "")  # Иконка погоды
-    city = payload.get("name", "Неизвестно")  # Название города
+    temp = round(main.get("temp", 0))  
+    descr = weather.get("description", "-")  
+    icon = weather.get("icon", "")  
+    city = payload.get("name", "Неизвестно")  
 
     return {
         "city": city,
@@ -218,29 +197,3 @@ def data_url(region_id: str) -> dict:
         "descr": descr,
         "icon": icon,
     }
-=======
-    except requests.exceptions.RequestException as exc:
-        # Сетевая ошибка или таймаут
-        logger.error("Сетевая ошибка: %s", exc)
-        raise RuntimeError(f"Ошибка сети: {exc}")
-    except ValueError as exc:
-        logger.error("Невалидный JSON: %s", exc)
-        raise RuntimeError(f"Невалидный JSON: {exc}")
-
-    if not isinstance(payload, dict) or "data" not in payload or not payload["data"]:
-        raise RuntimeError("Неверный ответ от API: отсутствует поле data")
-
-    item = payload["data"][0]
-    temp_raw = item.get("temp")
-    try:
-        temp = round(float(temp_raw)) if temp_raw is not None else 0
-    except (TypeError, ValueError):
-        temp = 0
-
-    weather = item.get("weather") or {}
-    descr = weather.get("description") or "-"
-    icon = weather.get("icon") or ""
-    city = item.get("city_name") or "Неизвестно"
-
-    return {"city": city, "temp": temp, "descr": descr, "icon": icon}
->>>>>>> aeab2257e541bc5209d3391112e0528937120c17

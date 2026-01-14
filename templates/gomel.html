@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Погода в Гомеле</title>
-    <link rel="stylesheet" href="/static/style.css?v=1">
+    <link rel="stylesheet" href="/static/style.css?v=2">
 </head>
 <body id="bd">
     <section id="resultat" class="resultat" aria-live="polite">
@@ -35,7 +35,6 @@
             <button class="rg_gor" id="chechersk">Чечерский</button>
         </div>
     </section>
-<<<<<<< HEAD
 
     <div class="data_wh">
         <div class="temp" id="temp">—°C</div>
@@ -43,13 +42,6 @@
         <div id="txt" class="txt">—</div>
     </div>
 
-=======
-    <div class="data_wh">
-        <div class="temp" id="temp">—°C</div>
-        <img id="kartinka" alt="" class="kartinka" />
-        <div id="txt" class="txt">—</div>
-    </div>
->>>>>>> aeab2257e541bc5209d3391112e0528937120c17
     <script>
         const tempEl = document.getElementById("temp");
         const txtEl = document.getElementById("txt");
@@ -57,7 +49,6 @@
         const buttons = document.querySelectorAll(".rg_gor");
 
         async function loadWeather(regionId) {
-<<<<<<< HEAD
             tempEl.textContent = "…";
             txtEl.textContent = "Загрузка...";
             imgEl.style.display = "none"; 
@@ -90,39 +81,6 @@
             btn.addEventListener("click", () => {
                 loadWeather(btn.id);  
             });
-=======
-        tempEl.textContent = "…";
-        txtEl.textContent = "Загрузка...";
-        imgEl.style.display = "none";
-
-        try {
-            const res = await fetch(`/weather/${regionId}`);
-            if (!res.ok) throw new Error(`Ошибка: ${res.status}`);
-            const data = await res.json();
-
-            tempEl.textContent = `${data.temp}°C`;
-            txtEl.textContent = data.descr || "—";
-
-            if (data.icon) {
-            imgEl.src = `https://www.weatherbit.io/static/img/icons/${data.icon}.png`;
-            imgEl.alt = data.descr;
-            imgEl.style.display = "";
-            } else {
-            imgEl.style.display = "none";
-            }
-        } catch (err) {
-            tempEl.textContent = "—°C";
-            txtEl.textContent = "Ошибка загрузки";
-            imgEl.style.display = "none";
-            console.error(err);
-        }
-        }
-
-        buttons.forEach(btn => {
-        btn.addEventListener("click", () => {
-            loadWeather(btn.id);
-        });
->>>>>>> aeab2257e541bc5209d3391112e0528937120c17
         });
     </script>
 </body>
